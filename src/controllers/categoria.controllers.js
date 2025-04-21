@@ -14,8 +14,8 @@ const getCategorias = async (req, res) =>{
 const postCategorias = async (req, res) =>{
     try {
         const {CategoriaNombre, Descripcion, Imagen} = req.body; // Con el body, debido a que se hace por JSON, directamente en codigo
-        const connection = await getConnection(); // El await solo es permitido en funciones asincronas que devuelven una promesa
         const category = {CategoriaNombre, Descripcion, Imagen};
+        const connection = await getConnection(); // El await solo es permitido en funciones asincronas que devuelven una promesa
         const result = await connection.query("INSERT INTO Categorias SET ?", category);
         res.json(result)
     } catch (error) {
@@ -47,9 +47,23 @@ const deleteCategory = async (req, res) =>{
     }
 }
 
+const updateCategorias = async (req, res) =>{
+    try {
+        const {id} = req.params;
+        const {CategoriaNombre, Descripcion, Imagen} = req.body; // Con el body, debido a que se hace por JSON, directamente en codigo
+        const category = {CategoriaNombre, Descripcion, Imagen};
+        const connection = await getConnection(); // El await solo es permitido en funciones asincronas que devuelven una promesa
+        const result = await connection.query("UPDATE  Categorias SET ? WHERE CategoriaID = ?", [category, id]);
+        res.json(result)
+    } catch (error) {
+        console.error("ERROR 500");
+    }
+}
+
 export const methodHTTP = {
     getCategorias,
     postCategorias,
     getCategory,
-    deleteCategory
+    deleteCategory,
+    updateCategorias
 }
